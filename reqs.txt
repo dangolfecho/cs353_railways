@@ -1,0 +1,33 @@
+App.js - 
+
+1. Login - G
+2. Account Creation - A
+3. Navbar - G
+    3.1 Booked Tickets - Cancel Ticket, Print Ticket
+4. PNR - G
+5. Main page - A
+6. Upcoming Journey - A
+
+Main page
+1. Modify search - B
+2. Filters
+    2.1 Class - G
+    2.2 Departure Time - G
+    2.3 Arrival Time - A
+3. Sort
+    3.1 Duration - A
+    3.2 Departure Time - A
+    3.3 Arrival Time - G
+4. Availability
+   4.1 Slider - A
+   4.2 Pagination -G
+
+Booking page
+1. Passenger Details - A
+2. Contact Details - B
+3. Preference, Insurance - G
+4. Payment- B
+
+Time permits
+
+Charts
