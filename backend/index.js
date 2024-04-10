@@ -12,3 +12,7 @@ const db = mysql.createConnection({
     password: "root",
     database: "railways",
 });
+
+app.listen(8000, () => {
+    console.log("Connected to backend!");
+});
