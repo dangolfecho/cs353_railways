@@ -13,6 +13,20 @@ const db = mysql.createConnection({
     database: "railways",
 });
 
+app.get("/", (req, res) => {
+    res.json("Hello this the backend");
+});
+
+app.get("/trains", (req, res) => {
+    const q = "SELECT * FROM userinfo";
+    db.query(q, (err, data) => {
+        if(err){
+            return res.json(err);
+        }
+        return res.json(data);
+    });
+});
+
 app.listen(8000, () => {
     console.log("Connected to backend!");
 });
