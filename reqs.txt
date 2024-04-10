@@ -1,33 +1,49 @@
 App.js - 
 
-1. Login - G
-2. Account Creation - A
-3. Navbar - G
-    3.1 Booked Tickets - Cancel Ticket, Print Ticket
-4. PNR - G
-5. Main page - A
-6. Upcoming Journey - A
+1. Login - /login Login.js G
+2. Account Creation - /register Register.js A
+3. PNR - /pnr Pnr.js G
 
 Main page
-1. Modify search - B
-2. Filters
+0. Search - Search.js
+1. Main page - Main.js /home A
+2. Navbar - Nav.js G
+    2.1 Booked Tickets - Cancel Ticket, Print Ticket : /tickets - Booktickets.js, Ticket.js
+3. Upcoming Journey - Upcoming.js A
+
+After searching
+1. Modify search ModifySearch.js - B
+2. Filters - Filter.js
     2.1 Class - G
     2.2 Departure Time - G
     2.3 Arrival Time - A
-3. Sort
+3. Sort - Sort.js
     3.1 Duration - A
     3.2 Departure Time - A
     3.3 Arrival Time - G
-4. Availability
+4. Availability - Box.js, MiniBox.js, Seats.js
    4.1 Slider - A
    4.2 Pagination -G
 
-Booking page
-1. Passenger Details - A
-2. Contact Details - B
-3. Preference, Insurance - G
-4. Payment- B
+Booking page - /reserve Reservation.js
+1. Passenger Details - PasDetails.js A
+2. Contact Details - Contact.js B
+3. Preference, Insurance - Preference.js G
+4. Payment- Payment.js B
 
 Time permits
 
 Charts
+
+
+Databases
+
+userinfo - username, password, dob, country, gender, email, mobileNo
+services - service_id, train_no, date
+tickets - service_id, train_type, class, berth, no of seats, cost
+train_makeup - train_no, class, coach_count, seats_per_coach
+train_route - train_no, stop_no, station_name, time, day_no
+booked_seats - service_id, coach, berth, ticket_id
+booked_tickets - ticket_id#, service_id#, passenger_no, age, aadhar no,
+from_station, to_station
+gender, coach, berth (increment/decrement the ticket count)
