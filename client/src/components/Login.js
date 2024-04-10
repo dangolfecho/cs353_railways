@@ -13,6 +13,18 @@ const Login = () => {
         setPassword(event.target.value);
     }
 
+    const handleSubmit = () => {
+        const sub_username = username;
+        const sub_password = password;
+        axios.post("http://localhost:8000/login", {
+            username: sub_username,
+            password: sub_password
+        }).then(function (res) {
+            console.log(res); 
+        }).catch(function(error){
+            console.log(error);
+        })
+    }
     return (
         <div>
         <h1>Login page</h1>
@@ -22,7 +34,7 @@ const Login = () => {
         <label for="password">Enter your password</label>
         <input id="password" name="password" type='password' onChange={handlePasswordChange}></input>
         <br/>
-        <button type="submit">Login</button>
+        <button type="submit" onClick={handleSubmit}>Login</button>
         </div>
     )
 };
