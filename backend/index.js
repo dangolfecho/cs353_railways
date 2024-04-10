@@ -17,11 +17,11 @@ app.get("/", (req, res) => {
     res.json("Hello this the backend");
 });
 
-app.get("/login", (req, res) => {
-    const q = "SELECT * FROM userinfo WHERE username=`usr`";
-
-    const vals = [req.body.username];
-    db.query(q, [vals], (err, data) => {
+app.post("/login", (req, res) => {
+    const username = req.body.username;
+    const password = req.body.password;
+    const q = `SELECT * FROM userinfo WHERE username = "${username}"`;
+    db.query(q, (err, data) => {
         if(err){
             return res.json(err);
         }
@@ -29,7 +29,7 @@ app.get("/login", (req, res) => {
             return res.json("No such account");
         }
         else{
-            const q = "SELECT * FROM userinfo WHERE username=`usr` AND password=`pass`";
+            const q = `SELECT * FROM userinfo WHERE username = "${username}" AND password = "${password}"`;
             const vals_inner = [req.body.username, req.body.password];
             db.query(q, [vals_inner], (err, data) => {
                 if(err){
