@@ -1,6 +1,7 @@
 App.js - 
 
-1. Login - /login Login.js G
+0. Home - / - Home.js
+1. Login - Login.js G
 2. Account Creation - /register Register.js A
 3. PNR - /pnr Pnr.js G
 
