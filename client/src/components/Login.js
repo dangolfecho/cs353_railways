@@ -15,6 +15,10 @@ const Login = () => {
         setPassword(event.target.value);
     }
 
+    const handleClick = (event) => {
+        navigate("/register");
+    }
+
     const handleSubmit = () => {
         const sub_username = username;
         const sub_password = password;
@@ -40,6 +44,8 @@ const Login = () => {
         <br/>
         <button type="button" onClick={handleSubmit}>Login</button>
         </form>
+        <h2>Click here to register if you do not have an account</h2>
+        <button type="button" onClick={handleClick}>Register</button>
         </div>
     )
 };

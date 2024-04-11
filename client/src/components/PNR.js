@@ -1,9 +1,9 @@
 import React from "react";
 
-const PNR = () => {
+const Pnr = () => {
     return (
         <h1>Filler</h1>
     );
 };
 
-export default PNR;
+export default Pnr;
