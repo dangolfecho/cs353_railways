@@ -5,9 +5,9 @@ App.js -
 2. Account Creation - /register Register.js A
 3. PNR - /pnr Pnr.js G
 
-Main page
-0. Search - Search.js
+Main page - /home Main.js
 1. Main page - Main.js /home A
+1.5. Search - Search.js
 2. Navbar - Nav.js G
     2.1 Booked Tickets - Cancel Ticket, Print Ticket : /tickets - Booktickets.js, Ticket.js
 3. Upcoming Journey - Upcoming.js A

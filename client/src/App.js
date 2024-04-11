@@ -6,6 +6,8 @@ import Pnr from "./components/Pnr.js";
 import Main from "./components/Main.js";
 import Search from "./components/Search.js";
 import Reservation from "./components/Reservation.js";
+import Tickets from "./components/Tickets.js";
+
 function App() {
     return (
         <div className='App'>
@@ -15,6 +17,7 @@ function App() {
                     <Route path='/register' element={<Register />} />
                     <Route path='/pnr' element={<Pnr />} />
                     <Route path='/home' element={<Main />} />
+                    <Route path='/tickets' element={<Tickets />} />
                     <Route path='/search' element={<Search />} />
                     <Route path='/reserve' element={<Reservation />} />
 
