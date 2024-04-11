@@ -20,7 +20,6 @@ function App() {
                     <Route path='/tickets' element={<Tickets />} />
                     <Route path='/search' element={<Search />} />
                     <Route path='/reserve' element={<Reservation />} />
-
                 </Routes>
             </BrowserRouter>
         </div>
