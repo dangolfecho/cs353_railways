@@ -1,8 +1,15 @@
 import React from "react";
+import Search from "./Search.js";
+import Nav from "./Nav.js";
+import Upcoming from "./Upcoming.js";
 
 const Main = () => {
     return (
-        <h1>Filler</h1>
+        <div>
+            <Nav />
+            <Search />
+            <Upcoming />
+        </div>
     );
 };
 
