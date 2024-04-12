@@ -30,6 +30,41 @@ app.get("/upcoming-journeys", (req, res) => {
     });
 });
 
+// Endpoint for receiving passenger details
+app.post("/passenger-details", (req, res) => {
+    const passengerDetails = req.body;
+    const {
+        name,
+        age,
+        gender,
+        birthPreference,
+        autoUpgradation,
+        bookOnlyConfirmedBerths,
+    } = passengerDetails;
+
+    // Insert the passenger details into the database
+    const query = `INSERT INTO passenger_details (name, age, gender, birth_preference, auto_upgradation, book_only_confirmed_berths) 
+                   VALUES (?, ?, ?, ?, ?, ?)`;
+    const values = [
+        name,
+        age,
+        gender,
+        birthPreference,
+        autoUpgradation,
+        bookOnlyConfirmedBerths,
+    ];
+
+    db.query(query, values, (error, result) => {
+        if (error) {
+            console.error("Error saving passenger details:", error);
+            res.status(500).json({ error: "Internal server error" });
+            return;
+        }
+        console.log("Passenger details saved successfully!");
+        res.json({ message: "Passenger details saved successfully!" });
+    });
+});
+
 app.post("/login", (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
