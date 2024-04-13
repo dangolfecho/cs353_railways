@@ -48,3 +48,56 @@ booked_seats - service_id, coach, berth, ticket_id
 booked_tickets - ticket_id#, service_id#, passenger_no, age, aadhar no,
 from_station, to_station
 gender, coach, berth (increment/decrement the ticket count)
+
+Create table commands
+
+CREATE TABLE userinfo(
+    username VARCHAR(20) PRIMARY KEY,
+    password VARCHAR(20),
+    dob DATE,
+    country VARCHAR(20),
+    gender VARCHAR(20),
+    email VARCHAR(20) UNIQUE,
+    mobileNo INTEGER(10) UNIQUE
+);
+
+CREATE TABLE services(
+    service_id integer(10),
+    train_no integer(6),
+    date_of_journey DATE
+);
+
+CREATE TABLE tickets (
+    service_id integer(10),
+    class varchar(10),
+    berth varchar(10),
+    avail integer(4),
+    cost integer(5)
+);
+
+CREATE TABLE train_makeup(
+    train_no INTEGER(6),
+    class VARCHAR(10),
+    coach_count INTEGER(2),
+    seats_per_coach INTEGER(2)
+);
+
+CREATE TABLE train_route(
+    train_no INTEGER(6),
+    stop_no INTEGER(2),
+    station_name VARCHAR(20),
+    dep_time VARCHAR(5),
+    arr_time VARCHAR(5),
+    day_no INTEGER(2)
+);
+
+CREATE TABLE booked_seats(
+    ticket_id INTEGER(10),
+    service_id INTEGER(10),
+    passenger_no INTEGER(2),
+    age Integer(3),
+    aadhar_no INTEGER(12),
+    from_station VARCHAR(20),
+    to_station VARCHAR(20),
+    PRIMARY KEY (ticket_id, passenger_no)
+);
