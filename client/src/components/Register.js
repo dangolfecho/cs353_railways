@@ -39,7 +39,7 @@ const AccountCreationForm = () => {
         axios.post("http://localhost:8000/register", formData).then(function (res) {
             if(res.data === "Register success"){
                 console.log("HI");
-                navigate("/main");
+                navigate("/home");
             }
         }).catch(function(error){
             console.log(error);
