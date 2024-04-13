@@ -31,7 +31,7 @@ app.get("/upcoming-journeys", (req, res) => {
 });
 
 // Endpoint for receiving passenger details
-app.post("/passenger-details", (req, res) => {
+app.post("/registerdetails", (req, res) => {
     const passengerDetails = req.body;
     const {
         name,
@@ -91,6 +91,21 @@ app.post("/login", (req, res) => {
         }
     });
 });
+
+app.post("/register", (req, res) => {
+    const values = req.body;
+
+    const q = `INSERT INTO userinfo VALUES("${values.username}", "${values.password}", "${values.dob}","${values.country}","${values.gender}","${values.email}","${values.mobileNumber}")`;
+    console.log(q);
+
+    db.query(q, (err, data) => {
+        if(err){
+            return res.json(err);
+        }
+        return res.json("Register success");
+    });
+});
+
 
 app.listen(8000, () => {
     console.log("Connected to backend!");

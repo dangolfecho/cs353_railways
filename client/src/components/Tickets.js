@@ -1,9 +1,10 @@
 import React from 'react';
 
 const Tickets = () => {
+
     return (
         <div>
-            Tickets
+        Your tickets should be displayed here!
         </div>
     );
 }

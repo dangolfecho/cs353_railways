@@ -1,11 +1,17 @@
 import React from 'react';
-import Tickets from "./Tickets.js";
+import {useNavigate} from "react-router-dom";
 
 const Nav = () => {
+    const navigate = useNavigate();
+
+    const handleClick = (event) => {
+        navigate("/tickets");
+    };
+
     return (
         <div>
             <h1>Navbar</h1>
-            <Tickets />
+            <button onClick={handleClick}>My Tickets</button>
         </div>
     );
 }

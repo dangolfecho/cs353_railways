@@ -1,6 +1,10 @@
 import React, { useState } from "react";
+import {useNavigate} from "react-router-dom";
+import axios from 'axios';
 
 const AccountCreationForm = () => {
+
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         username: "",
         password: "",
@@ -32,26 +36,15 @@ const AccountCreationForm = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (validateForm()) {
-            // Form data is valid, you can proceed with further actions
-            console.log(formData);
-            // Here you can make a request to your backend server to save the data
-            // Example:
-            // fetch('http://your-backend-server.com/api/createAccount', {
-            //   method: 'POST',
-            //   body: JSON.stringify(formData),
-            //   headers: {
-            //     'Content-Type': 'application/json'
-            //   }
-            // }).then(response => {
-            //   if (response.ok) {
-            //     // Handle success
-            //   } else {
-            //     // Handle error
-            //   }
-            // }).catch(error => {
-            //   console.error('Error:', error);
-            // });
-        }
+        axios.post("http://localhost:8000/register", formData).then(function (res) {
+            if(res.data === "Register success"){
+                console.log("HI");
+                navigate("/main");
+            }
+        }).catch(function(error){
+            console.log(error);
+        })
+    }
     };
 
     const {
