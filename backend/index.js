@@ -27,7 +27,12 @@ app.get("/getTickets", (req, res) => {
             res.status(500).json({ error: "Internal server error" });
             return;
         }
-        res.json(results);
+        if(results.length === 0){
+            res.json(["No tickets"]);
+        }
+        else{
+            res.json(results);
+        }
     });
 });
 
