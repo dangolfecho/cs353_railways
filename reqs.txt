@@ -48,6 +48,7 @@ booked_seats - service_id, coach, berth, ticket_id
 booked_tickets - ticket_id#, service_id#, passenger_no, age, aadhar no,
 pas_tickets - username, ticket_id
 from_station, to_station
+trains - train_no, train_name
 gender, coach, berth (increment/decrement the ticket count)
 
 Create table commands
@@ -106,3 +107,10 @@ CREATE TABLE pas_tickets(
 	username VARCHAR(50),
 	ticket_id INTEGER(10)
 );
+
+INSERT INTO train_route (train_no, stop_no, station_name, arr_time, dep_time, day_no) VALUES
+(22652, 0, "MS-Chennai Egmore", "12:00", "06:00", 1),
+(22652, 1, "TBM-Tambaram", "06:30", "06:35", 1),
+(22652, 2, "TPJ-Tiruchirappalli JN", "09:55", "12:00", 1);
+
+..

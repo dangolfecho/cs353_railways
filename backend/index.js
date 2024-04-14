@@ -29,6 +29,7 @@ app.get("/getTickets", (req, res) => {
         }
         if(results.length === 0){
             res.json(["No tickets"]);
+            console.log(res);
         }
         else{
             res.json(results);
@@ -47,7 +48,20 @@ app.get("/pnr", (req, res) => {
         }
         res.json(result);
     })
-})
+});
+
+app.get("/fetchStations", (req, res) => {
+    const query = `SELECT DISTINCT(station_name) FROM train_route`;
+    db.query(query, (err, result) => {
+        if(err){
+            console.log(err);
+            res.json("Error!");
+        }
+        else{
+            res.json(result);
+        }
+    })
+});
 
 
 // Endpoint for receiving passenger details
