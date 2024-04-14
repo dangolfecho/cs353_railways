@@ -2,25 +2,36 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Select from 'react-select';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setTo, setFrom, setDate } from "../features/userSlice";
 
 const Search = () => {
     const [stations, setStations] = useState([]);
     const [selectedFrom, setSelectedFrom] = useState(null);
     const [selectedTo, setSelectedTo] = useState(null);
-    const [date, setDate] = useState("");
+    const [bookDate, setBookDate] = useState("");
 
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const handleClick = (event) =>{
-        axios.post("http://localhost:8000/search", {params: {date: date, from: selectedFrom, to: selectedTo,}}).then(function(res){
-            navigate("avail");
-        }).catch(function (err) {
-            console.log(err);
-        });
+        dispatch(setTo({
+            to_station:selectedTo
+        }))
+        dispatch(setFrom({
+            from_station:selectedFrom
+        }))
+        dispatch(setDate({
+            date:bookDate
+        }))
+        navigate("avail");
     }
     useEffect(() =>{
     axios.get("http://localhost:8000/fetchStations").then(function (res) {
-        setStations(res.data);
-        console.log(res.data);
+        var temp = [];
+        for(var i=0;i<res.data.length;i++){
+            temp.push({"value": res.data[i]['station_name'], "label": res.data[i]['station_name']});
+            setStations(temp);
+        }
     }).catch(function (err){
        alert("Error in fetching stations! Try again"); 
     });
@@ -41,7 +52,7 @@ const Search = () => {
                 options={stations}
             />
             <label for="date">Date: </label>
-            <input name="date" type="date" onChange={setDate}></input>
+            <input name="date" type="date" onChange={setBookDate}></input>
             <br></br>
             <button type="button" onClick={handleClick}>Search</button>
         </div>
