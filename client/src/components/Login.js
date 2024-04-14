@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { UserContext } from './UserContext.js';
 
 const Login = () => {
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
     const navigate = useNavigate();
+    const { setUsername: setUsernameContext } = useContext(UserContext);
 
     const handleUserChange = (event) => {
         setUsername(event.target.value);
@@ -25,7 +27,7 @@ const Login = () => {
         const data = {username: sub_username, password: sub_password};
         axios.post("http://localhost:8000/login", data).then(function (res) {
             if(res.data === "Login success"){
-                console.log("HI");
+                setUsernameContext(sub_username);
                 navigate("/home");
             }
         }).catch(function(error){

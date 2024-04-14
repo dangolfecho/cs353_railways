@@ -18,15 +18,15 @@ app.get("/", (req, res) => {
 });
 
 // Endpoint for fetching upcoming journeys
-app.get("/upcoming-journeys", (req, res) => {
-    const query = "SELECT * FROM upcoming_journeys"; // Database schema must contain upcoming_journeys
+app.get("/getTickets", (req, res) => {
+    const query = `SELECT UNIQUE(service_id) FROM booked_seats WHERE ticket_id="${user}"`; // Database schema must contain upcoming_journeys
     db.query(query, (error, results) => {
         if (error) {
             console.error("Error fetching upcoming journeys:", error);
             res.status(500).json({ error: "Internal server error" });
             return;
         }
-        res.json(results);
+        console.log(results);
     });
 });
 
