@@ -1,23 +1,26 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useSelector } from "react-redux";
+import { selectUser } from "../features/userSlice";
 
 const UpcomingJourney = () => {
     const [upcomingJourneys, setUpcomingJourneys] = useState([]);
 
+    const username = useSelector(selectUser);
     useEffect(() => {
-        const fetchUpcomingJourneys = async () => {
-            try {
-                const response = await axios.get(
-                    "http://localhost:8000/upcoming-journeys"
-                );
-                setUpcomingJourneys(response.data);
-            } catch (error) {
-                console.error("Error fetching upcoming journeys:", error);
-            }
-        };
+        axios.get("http://localhost:8000/getTickets", {params: {id: username}})
+        .then(function (result) {
+            setUpcomingJourneys(result.data);
+        }).catch(function (err){
+            console.log(err);
+        });
+    }, [username]);
 
-        fetchUpcomingJourneys();
-    }, []);
+    if(upcomingJourneys[0] === "No tickets"){
+        return(
+            <h1>No upcoming journeys!</h1>
+        );
+    }
 
     return (
         <div>
