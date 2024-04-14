@@ -23,7 +23,11 @@ const Search = () => {
         dispatch(setDate({
             date:bookDate
         }))
-        navigate("avail");
+        navigate("/avail");
+    }
+
+    const handleChange = (event) => {
+        setBookDate(event.target.value);
     }
     useEffect(() =>{
     axios.get("http://localhost:8000/fetchStations").then(function (res) {
@@ -42,17 +46,17 @@ const Search = () => {
             <label for="from">From</label>
             <Select name='from' id='from'
                 defaultValue={selectedFrom}
-                onChange={setSelectedFrom}
+                onChange={(choice) => setSelectedFrom(choice.value)}
                 options={stations}
             />
             <label for="to">To</label>
             <Select name='to' id='to'
                 defaultValue={selectedTo}
-                onChange={setSelectedTo}
+                onChange={(choice) => setSelectedTo(choice.value)}
                 options={stations}
             />
             <label for="date">Date: </label>
-            <input name="date" type="date" onChange={setBookDate}></input>
+            <input name="date" type="date" onChange={handleChange}></input>
             <br></br>
             <button type="button" onClick={handleClick}>Search</button>
         </div>

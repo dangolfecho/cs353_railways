@@ -37,6 +37,14 @@ app.get("/getTickets", (req, res) => {
     });
 });
 
+app.get("/search", (req, res) => {
+    const date = req.body.date;
+    const from_s = req.body.from;
+    const to_s = req.body.to;
+    const query = `SELECT train_no FROM train_route A, train_route B WHERE A.train_no = B.train_no AND A.station_name="${from_s}" AND B.station_name="${to_s}"`
+
+})
+
 // get tickets - using pnr
 app.get("/pnr", (req, res) => {
     const id = req.body.id;
@@ -70,10 +78,8 @@ app.post("/registerdetails", (req, res) => {
     const {
         name,
         age,
-        gender,
         birthPreference,
-        autoUpgradation,
-        bookOnlyConfirmedBerths,
+        autoUpgradation
     } = passengerDetails;
 
     // Insert the passenger details into the database
@@ -98,6 +104,37 @@ app.post("/registerdetails", (req, res) => {
         res.json({ message: "Passenger details saved successfully!" });
     });
 });
+
+app.post("/book", (req, res) => {
+    const num = req.body.count;
+    const user = req.body.user;
+    var q = `SELECT MAX(ticket_id) FROM booked_seats`;
+    var t_no = 1;
+    db.query(q, (err, data) => {
+        if(err){
+            return res.json(err);
+        }
+        else{
+            t_no += data;
+        }
+    })
+    for(var i=1;i<=num;i+=1){
+        const x = `INSERT INTO booked_seats VALUES (${t_no},${s_id}, ${i}, ${age}, ${aadhar},"${from_station}","${to_station}","${p_name}")`;
+        db.query(x, (err, data) => {
+            if(err){
+                return res.json(err);
+            }
+        })
+    }
+    const y = `INSERT INTO pas_tickets VALUES("${user}", ${t_no})`;
+    db.query(y, (err, data) => {
+        if(err){
+            return res.json(err);
+        }
+    })
+    return res.json(t_no);
+})
+
 
 app.post("/login", (req, res) => {
     const username = req.body.username;
