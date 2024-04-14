@@ -9,10 +9,12 @@ const Main = () => {
     const user = useSelector(selectUser);
     console.log(user.name);
     return (
-        <div>
-        <h1>{user.name}</h1>
+        <div id="search">
+        <h1>Welcome {user.name}</h1>
             <Nav />
+            <br/>
             <Search />
+            <br/>
             <Upcoming />
            
         </div>
