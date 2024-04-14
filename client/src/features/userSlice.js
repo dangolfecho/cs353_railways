@@ -10,6 +10,7 @@ export const userSlice = createSlice({
         date:null,
         train_no:null,
         sdate:null,
+        cost:null,
     },
     reducers:{
         login: (state, action) => {
@@ -35,11 +36,14 @@ export const userSlice = createSlice({
         },
         setSDate: (state, action) => {
             state.sdate = action.payload;
+        },
+        setCost: (state, action) => {
+            state.cost = action.payload;
         }
     }
 });
 
-export const {login, logout, setpnr, setTo, setFrom, setDate, setTrain, setSDate} = userSlice.actions;
+export const {login, logout, setpnr, setTo, setFrom, setDate, setTrain, setSDate, setCost} = userSlice.actions;
 
 export const selectUser = (state) => state.user.user;
 
@@ -50,5 +54,6 @@ export const selectFrom = (state) => state.user.selectedFrom;
 export const selectDate = (state) => state.user.date;
 export const selectTrain = (state) => state.user.train_no;
 export const selectSDate = (state) => state.user.sdate;
+export const selectCost = (state) => state.user.cost;
 
 export default userSlice.reducer;

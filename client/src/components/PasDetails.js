@@ -1,7 +1,13 @@
 import React, { useState } from "react";
 import axios from "axios";
+import {useSelector} from "react-redux";
+import {selectUser, selectCost} from "../features/userSlice";
 
 const PasDetails = () => {
+    const user = useSelector(selectUser);
+    const cost = useSelector(selectCost);
+    console.log(user, cost);
+    const [dis, setDis] = useState(0);
     const initialPassengerState = {
         name: "",
         age: "",
@@ -10,7 +16,6 @@ const PasDetails = () => {
         autoUpgradation: false,
         bookOnlyConfirmedBerths: false,
     };
-
     const [passengers, setPassengers] = useState([
         { ...initialPassengerState },
     ]);
@@ -41,15 +46,28 @@ const PasDetails = () => {
         } catch (error) {
             console.error("Error submitting passenger details:", error);
         }
+
+        axios.post("http://localhost:8000/book", {num: passengers.length, user: user}).then(function(res){
+            alert(`Ticket booked - ${res.data}`)
+        }).catch(function(error){
+
+        });
     };
 
     const handleAddPassenger = () => {
         setPassengers([...passengers, { ...initialPassengerState }]);
+        const x = passengers.length+1;
+        console.log(passengers.length);
+        setDis(cost*x);
     };
 
     const handleDeletePassenger = (index) => {
         const newPassengers = passengers.filter((_, i) => i !== index);
         setPassengers(newPassengers);
+        const x = newPassengers.length+1;
+        console.log(newPassengers.length);
+        console.log(passengers.length);
+        setDis(cost*x);
     };
 
     return (
@@ -141,8 +159,9 @@ const PasDetails = () => {
                 + Add Another Passenger
             </button>
             <br />
+            <h2>Cost:{dis}</h2>
             <button type='submit' onClick={handleSubmit}>
-                Submit
+                Pay and submit
             </button>
         </div>
     );

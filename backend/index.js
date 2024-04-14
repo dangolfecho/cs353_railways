@@ -29,7 +29,6 @@ app.get("/getTickets", (req, res) => {
         }
         if(results.length === 0){
             res.json(["No tickets"]);
-            console.log(res);
         }
         else{
             res.json(results);
@@ -37,13 +36,77 @@ app.get("/getTickets", (req, res) => {
     });
 });
 
-app.get("/search", (req, res) => {
-    const date = req.body.date;
-    const from_s = req.body.from;
-    const to_s = req.body.to;
-    const query = `SELECT train_no FROM train_route A, train_route B WHERE A.train_no = B.train_no AND A.station_name="${from_s}" AND B.station_name="${to_s}"`
+app.get("/search", async (req, res) => {
+    try {
+        const { date: {date}, from: { from_station }, to: { to_station } } = req.query;
 
-})
+        const trainsQuery = `SELECT A.train_no 
+                             FROM train_route A, train_route B 
+                             WHERE A.train_no = B.train_no 
+                             AND A.station_name = ? 
+                             AND B.station_name = ?`;
+
+        const trains = await new Promise((resolve, reject) => {
+            db.query(trainsQuery, [from_station, to_station], (err, data) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(data);
+                }
+            });
+        });
+
+        if (trains.length === 0) {
+            return res.json("No trains");
+        }
+
+        const results = [];
+        for (const train of trains) {
+            const servicesQuery = `SELECT service_id 
+                                   FROM services 
+                                   WHERE train_no = ? 
+                                   AND date_of_journey = ?`;
+
+            const services = await new Promise((resolve, reject) => {
+                db.query(servicesQuery, [train.train_no, date], (err, data) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(data);
+                    }
+                });
+            });
+
+            for (const service of services) {
+                const ticketsQuery = `SELECT class, berth, avail, cost 
+                                      FROM tickets 
+                                      WHERE service_id = ?`;
+
+                const tickets = await new Promise((resolve, reject) => {
+                    db.query(ticketsQuery, [service.service_id], (err, data) => {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            resolve(data);
+                        }
+                    });
+                });
+
+                results.push({
+                    id: service.service_id,
+                    tickets: tickets
+                });
+                console.log(results);
+            }
+        }
+
+        res.json(results);
+    } catch (error) {
+        console.error("Error fetching search results:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
 
 // get tickets - using pnr
 app.get("/pnr", (req, res) => {
@@ -106,7 +169,7 @@ app.post("/registerdetails", (req, res) => {
 });
 
 app.post("/book", (req, res) => {
-    const num = req.body.count;
+    const num = req.body.num;
     const user = req.body.user;
     var q = `SELECT MAX(ticket_id) FROM booked_seats`;
     var t_no = 1;
