@@ -17,18 +17,33 @@ app.get("/", (req, res) => {
     res.json("Hello this the backend");
 });
 
-// Endpoint for fetching upcoming journeys
+// Endpoint for fetching upcoming journeys - using username
 app.get("/getTickets", (req, res) => {
-    const query = `SELECT UNIQUE(service_id) FROM booked_seats WHERE ticket_id="${user}"`; // Database schema must contain upcoming_journeys
+    const user = req.body.user;
+    const query = `SELECT (ticket_id) FROM pas_tickets WHERE username="${user}"`; // Database schema must contain upcoming_journeys
     db.query(query, (error, results) => {
         if (error) {
             console.error("Error fetching upcoming journeys:", error);
             res.status(500).json({ error: "Internal server error" });
             return;
         }
-        console.log(results);
+        res.json(results);
     });
 });
+
+// get tickets - using pnr
+app.get("/pnr", (req, res) => {
+    const id = req.body.id;
+    const query = `SELECT * FROM booked_seats WHERE ticket_id="${id}$`;
+    db.query(query, (err, result) => {
+        if(err) {
+            console.log(err);
+            return;
+        }
+        res.json(result);
+    })
+})
+
 
 // Endpoint for receiving passenger details
 app.post("/registerdetails", (req, res) => {
@@ -76,7 +91,7 @@ app.post("/login", (req, res) => {
         if (data.length === 0) {
             return res.json("No such account");
         } else {
-            const q = `SELECT * FROM userinfo WHERE username = "${username}" AND password = "${password}"`;
+            const q = `SELECT * FROM userinfo WHERE username = "${username}" AND user_password = "${password}"`;
             const vals_inner = [req.body.username, req.body.password];
             db.query(q, [vals_inner], (err, data) => {
                 if (err) {

@@ -13,11 +13,18 @@ const Tickets = () => {
         }
         axios.get('http://localhost:8000/getTickets', {params}).then(function(res) {
             setTicketsData(res);
+            console.log("data:"+ticketsData);
+            if(!ticketsData){
+                console.log("HI");
+            }
         }).catch( function (error) {
             console.log(error);
         });
     });
 
+    if (!ticketsData) {
+        return <div>No booked Tickets!</div>
+    }
     return (
         <div>
         Your tickets should be displayed here!
@@ -27,7 +34,7 @@ const Tickets = () => {
                 <p>PNR: </p>
                 <p>Passenger: </p>
                 <ul>
-                    {ticketsData.passengers.map((passenger, passengerIndex) => (
+                    {ticket.passengers.map((passenger, passengerIndex) => (
                         <li key={passengerIndex}>
                             Passenger Name: {passenger.name}
                         </li>

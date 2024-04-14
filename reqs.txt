@@ -46,6 +46,7 @@ train_makeup - train_no, class, coach_count, seats_per_coach
 train_route - train_no, stop_no, station_name, time, day_no
 booked_seats - service_id, coach, berth, ticket_id
 booked_tickets - ticket_id#, service_id#, passenger_no, age, aadhar no,
+pas_tickets - username, ticket_id
 from_station, to_station
 gender, coach, berth (increment/decrement the ticket count)
 
@@ -100,4 +101,8 @@ CREATE TABLE booked_seats(
     from_station VARCHAR(20),
     to_station VARCHAR(20),
     PRIMARY KEY (ticket_id, passenger_no)
+);
+CREATE TABLE pas_tickets(
+	username VARCHAR(50),
+	ticket_id INTEGER(10)
 );

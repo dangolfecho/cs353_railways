@@ -1,9 +1,13 @@
 import React from 'react';
 import Login from "./Login";
+import Pnr from "./Pnr.js";
 
 const Home = () => {
     return  (
-        <Login/>
+        <div>
+            <Login/>
+            <Pnr />
+        </div>
     )
 };
 

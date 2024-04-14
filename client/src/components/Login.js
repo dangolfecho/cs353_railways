@@ -1,13 +1,14 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { UserContext } from './UserContext.js';
+import { useDispatch } from "react-redux";
+import { login } from "../features/userSlice";
 
 const Login = () => {
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
     const navigate = useNavigate();
-    const { setUsername: setUsernameContext } = useContext(UserContext);
+    const dispatch = useDispatch();
 
     const handleUserChange = (event) => {
         setUsername(event.target.value);
@@ -27,7 +28,9 @@ const Login = () => {
         const data = {username: sub_username, password: sub_password};
         axios.post("http://localhost:8000/login", data).then(function (res) {
             if(res.data === "Login success"){
-                setUsernameContext(sub_username);
+                dispatch(login({
+                    name: username
+                }))
                 navigate("/home");
             }
         }).catch(function(error){
