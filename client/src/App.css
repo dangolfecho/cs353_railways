@@ -57,3 +57,15 @@ button {
 *{
   color: #213d77;
 }
+
+#login {
+  border: 1px solid #213d77;
+  height: fit-content;
+  width: fit-content;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 10px;
+}
+

@@ -38,13 +38,13 @@ const Login = () => {
         })
     }
     return (
-        <div>
-        <h1>Login page</h1>
+        <div id="login">
+        <h1>Welcome to Indian Railways</h1>
         <form>
-        <label htmlFor="username">Enter your username</label>
+        <label htmlFor="username">Enter username</label>
         <input id="username" name="username" type='text' onChange={handleUserChange}></input>
         <br/>
-        <label htmlFor="password">Enter your password</label>
+        <label htmlFor="password">Enter password</label>
         <input id="password" name="password" type='password' onChange={handlePasswordChange}></input>
         <br/>
         <button type="button" onClick={handleSubmit}>Login</button>

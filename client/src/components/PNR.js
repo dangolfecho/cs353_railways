@@ -1,23 +1,49 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { PnrContext } from "./PnrContext.js";
+import axios from "axios";
 
 const Pnr = () => {
     const navigate = useNavigate();
 
     const [pnr, setPnr] = useState("");
-    const { setPnr: setPnrContext} = useContext(PnrContext);
+    const [ticketDetails, setTicketDetails] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
 
-    const handleClick = (event) => {
-        setPnrContext(pnr);
-        navigate("display");
+    const handleChange = (event) => {
+        setPnr(event.target.value);
+    };
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        setLoading(true);
+        try {
+            const response = await axios.get(`http://localhost:8000/pnr?id=${pnr}`);
+            setTicketDetails(response.data);
+        } catch (error) {
+            setError(error.message);
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
         <div>
-            <label for="pnr">Enter your PNR number</label>
-            <input id="pnr" name="pnr" type="text" onChange={setPnr}></input>
-            <button onClick={handleClick}>Submit</button>
+            <form onSubmit={handleSubmit}>
+                <label htmlFor="pnr">Enter your PNR number</label>
+                <input id="pnr" name="pnr" type="text" value={pnr} onChange={handleChange} />
+                <button type="submit">Submit</button>
+            </form>
+            {loading && <div>Loading...</div>}
+            {error && <div>Error: {error}</div>}
+            {ticketDetails && (
+                <div>
+                    <h2>Ticket Details</h2>
+                    <p>PNR: {ticketDetails[0]["ticket_id"]}</p>
+                    <p>From station: {ticketDetails[0]["from_station"]}</p>
+                    <p>To station: {ticketDetails[0]["to_station"]}</p>
+                </div>
+            )}
         </div>
     );
 };

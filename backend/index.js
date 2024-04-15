@@ -134,16 +134,18 @@ app.get("/search", async (req, res) => {
 
 // get tickets - using pnr
 app.get("/pnr", (req, res) => {
-    const id = req.body.id;
-    const query = `SELECT * FROM booked_seats WHERE ticket_id="${id}$`;
+    const id = req.query.id; // Assuming the ID is sent as a query parameter
+    const query = `SELECT * FROM booked_seats WHERE ticket_id="${id}"`;
     db.query(query, (err, result) => {
         if(err) {
-            console.log(err);
+            console.error("Error fetching ticket details:", err);
+            res.status(500).json({ error: "Internal server error" });
             return;
         }
         res.json(result);
-    })
+    });
 });
+
 
 app.get("/fetchStations", (req, res) => {
     const query = `SELECT DISTINCT(station_name) FROM train_route`;
