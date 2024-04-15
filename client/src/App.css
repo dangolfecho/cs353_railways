@@ -37,13 +37,6 @@
   }
 }
 
-#search {
-  width: fit-content;
-  align-items: center;
-  justify-content: center;
-  color: #213d77;
-}
-
 #id {
   border: 1px solid black;
   padding: 5px;
@@ -69,3 +62,7 @@ button {
   padding: 10px;
 }
 
+#main{
+  top: 0%;
+  left: 50%;
+}

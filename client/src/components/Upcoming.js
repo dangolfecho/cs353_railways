@@ -23,7 +23,7 @@ const UpcomingJourney = () => {
     }
 
     return (
-        <div>
+        <div id="upcoming">
             <h2>Upcoming Journeys</h2>
             <ul>
                 {upcomingJourneys.map((journey) => (

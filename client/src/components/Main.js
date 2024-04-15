@@ -8,7 +8,7 @@ import { selectUser } from "../features/userSlice";
 const Main = () => {
     const user = useSelector(selectUser);
     return (
-        <div id="search">
+        <div id="main">
         <h1>Welcome {user.name}</h1>
             <Nav />
             <br/>
