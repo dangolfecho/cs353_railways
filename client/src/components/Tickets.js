@@ -1,49 +1,55 @@
-import React, { useState, useContext, useEffect } from 'react';
-import { UserContext } from './UserContext.js';
+import React, { useState,  useEffect } from 'react';
 import axios from 'axios';
+import {useSelector} from "react-redux";
+import {selectUser} from "../features/userSlice";
 
 const Tickets = () => {
-    const { username } = useContext(UserContext);
+    const username = useSelector(selectUser);
     const [ticketsData, setTicketsData] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
-        const params = {
-            user: username,
-        }
-        axios.get('http://localhost:8000/getTickets', {params}).then(function(res) {
-            setTicketsData(res.data);
-        }).catch( function (error) {
-            console.log(error);
-        });
-    });
-    if(ticketsData[0] === "No tickets"){
-        return(
-            <div>
-                No booked tickets!
-            </div>
-        );
+        const fetchTickets = async () => {
+            try {
+                const params = { user: username };
+                const res = await axios.get('http://localhost:8000/getTickets', { params });
+                setTicketsData(res.data);
+            } catch (error) {
+                setError(error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchTickets();
+    }, [username]);
+
+    if (loading) {
+        return <div>Loading...</div>;
     }
+
+    if (error) {
+        return <div>Error: {error.message}</div>;
+    }
+
+    if (ticketsData.length === 0) {
+        return <div>No booked tickets!</div>;
+    }
+
     return (
         <div>
-        Your tickets should be displayed here!
-        
-        {ticketsData.map((ticket, index) => (
-            <div key={index}>
-                <p>Train_no: </p>
-                <p>PNR: </p>
-                <p>Passenger: </p>
-                <ul>
-                    {ticket.passengers.map((passenger, passengerIndex) => (
-                        <li key={passengerIndex}>
-                            Passenger Name: {passenger.name}
-                        </li>
-                    ) )}
-                </ul>
-
-            </div>
-        ))}
+            {ticketsData.map((ticket, index) => (
+                <div>
+                <h1>Ticket:{index+1}</h1>
+                <div id="mytickets" key={index}>
+                    <p>Train_no: {ticket[index]["from_station"]}</p>
+                    <p>PNR: {ticket[index]["to_station"]}</p>
+                </div>
+                </div>
+            ))}
         </div>
     );
-}
+};
 
 export default Tickets;

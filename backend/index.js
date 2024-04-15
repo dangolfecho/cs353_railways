@@ -18,22 +18,46 @@ app.get("/", (req, res) => {
 });
 
 // Endpoint for fetching upcoming journeys - using username
-app.get("/getTickets", (req, res) => {
-    const user = req.body.user;
-    const query = `SELECT (ticket_id) FROM pas_tickets WHERE username="${user}"`; // Database schema must contain upcoming_journeys
-    db.query(query, (error, results) => {
-        if (error) {
-            console.error("Error fetching upcoming journeys:", error);
-            res.status(500).json({ error: "Internal server error" });
-            return;
+app.get("/getTickets", async (req, res) => {
+    try {
+        const user = req.query.user["name"];
+        const query = `SELECT ticket_id FROM pas_tickets WHERE username="${user}"`;
+        const results = await new Promise((resolve, reject) => {
+            db.query(query, (error, results) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve(results);
+                }
+            });
+        });
+
+        if (results.length === 0) {
+            return res.json(["No tickets"]);
         }
-        if(results.length === 0){
-            res.json(["No tickets"]);
+
+        const tickets = [];
+        for (let i = 0; i < results.length; i++) {
+            const ticketId = results[i].ticket_id;
+            const q2 = `SELECT DISTINCT from_station, to_station FROM booked_seats WHERE ticket_id=${ticketId}`;
+            const seatResults = await new Promise((resolve, reject) => {
+                db.query(q2, (err, res) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(res);
+                    }
+                });
+            });
+            tickets.push(seatResults);
         }
-        else{
-            res.json(results);
-        }
-    });
+
+        console.log(tickets);
+        res.json(tickets);
+    } catch (error) {
+        console.error("Error fetching tickets:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
 });
 
 app.get("/search", async (req, res) => {
@@ -168,35 +192,57 @@ app.post("/registerdetails", (req, res) => {
     });
 });
 
+
 app.post("/book", (req, res) => {
     const num = req.body.num;
     const user = req.body.user;
-    var q = `SELECT MAX(ticket_id) FROM booked_seats`;
-    var t_no = 1;
-    db.query(q, (err, data) => {
-        if(err){
-            return res.json(err);
+
+    // Get the maximum ticket ID
+    const maxQuery = `SELECT MAX(ticket_id) AS maxTicketId FROM booked_seats`;
+    db.query(maxQuery, (err, result) => {
+        if (err) {
+            return res.status(500).json({ error: err.message });
         }
-        else{
-            t_no += data;
-        }
-    })
-    for(var i=1;i<=num;i+=1){
-        const x = `INSERT INTO booked_seats VALUES (${t_no},${s_id}, ${i}, ${age}, ${aadhar},"${from_station}","${to_station}","${p_name}")`;
-        db.query(x, (err, data) => {
-            if(err){
-                return res.json(err);
-            }
+        // Extract the maximum ticket ID
+        const maxTicketId = result[0].maxTicketId || 0;
+        // Calculate the next ticket number
+        const ticketNumber = maxTicketId + 1;
+
+        // Use Promise.all to wait for all queries to complete
+        Promise.all(
+            Array.from({ length: num }, (_, i) => {
+                /*
+                const seatQuery = `INSERT INTO booked_seats (ticket_id, seat_number, ...) VALUES (?, ?, ...)`;
+                const seatValues = [ticketNumber, s_id, ...]; // Populate with appropriate values
+                return new Promise((resolve, reject) => {
+                    db.query(seatQuery, seatValues, (err, result) => {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            resolve(result);
+                        }
+                    });
+                });
+
+            */
+            })
+        )
+        .then(() => {
+            // Insert into pas_tickets table
+            const ticketQuery = `INSERT INTO pas_tickets (username, ticket_id) VALUES (?, ?)`;
+            const ticketValues = [user, ticketNumber];
+            db.query(ticketQuery, ticketValues, (err, result) => {
+                if (err) {
+                    return res.status(500).json({ error: err.message });
+                }
+                return res.json(ticketNumber);
+            });
         })
-    }
-    const y = `INSERT INTO pas_tickets VALUES("${user}", ${t_no})`;
-    db.query(y, (err, data) => {
-        if(err){
-            return res.json(err);
-        }
-    })
-    return res.json(t_no);
-})
+        .catch((err) => {
+            return res.status(500).json({ error: err.message });
+        });
+    });
+});
 
 
 app.post("/login", (req, res) => {

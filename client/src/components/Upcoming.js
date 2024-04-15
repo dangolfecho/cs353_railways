@@ -8,7 +8,7 @@ const UpcomingJourney = () => {
 
     const username = useSelector(selectUser);
     useEffect(() => {
-        axios.get("http://localhost:8000/getTickets", {params: {id: username}})
+        axios.get("http://localhost:8000/getTickets", {params: {user: username}})
         .then(function (result) {
             setUpcomingJourneys(result.data);
         }).catch(function (err){
@@ -28,11 +28,8 @@ const UpcomingJourney = () => {
             <ul>
                 {upcomingJourneys.map((journey) => (
                     <li key={journey.id}>
-                        <p>Train Name: {journey.trainName}</p>
-                        <p>Departure Time: {journey.departureTime}</p>
-                        <p>Arrival Time: {journey.arrivalTime}</p>
-                        <p>From: {journey.fromStation}</p>
-                        <p>To: {journey.toStation}</p>
+                        <p>From: {journey[0]["from_station"]}</p>
+                        <p>To: {journey[0]["to_station"]}</p>
                     </li>
                 ))}
             </ul>

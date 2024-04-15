@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import axios from "axios";
-import {useSelector} from "react-redux";
-import {selectUser, selectCost} from "../features/userSlice";
+import { useSelector } from "react-redux";
+import { selectUser, selectCost } from "../features/userSlice";
 
 const PasDetails = () => {
     const user = useSelector(selectUser);
-    const cost = useSelector(selectCost);
-    console.log(user, cost);
-    const [dis, setDis] = useState(0);
+    const c = useSelector(selectCost);
+    const cost = parseInt(c.c);
+    const [dis, setDis] = useState(cost);
     const initialPassengerState = {
         name: "",
         age: "",
@@ -16,9 +16,7 @@ const PasDetails = () => {
         autoUpgradation: false,
         bookOnlyConfirmedBerths: false,
     };
-    const [passengers, setPassengers] = useState([
-        { ...initialPassengerState },
-    ]);
+    const [passengers, setPassengers] = useState([{ ...initialPassengerState }]);
 
     const handleChange = (e, index) => {
         const { name, value, type, checked } = e.target;
@@ -31,43 +29,42 @@ const PasDetails = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            // Send data to backend
+            const bookingResponse = await axios.post("http://localhost:8000/book", { num: passengers.length, user: user });
+            const bookingId = bookingResponse.data;
+            console.log("Booking ID:", bookingId);
+
             await Promise.all(
                 passengers.map((passenger) =>
                     axios.post(
-                        "http://localhost:8000/passenger-details",
-                        passenger
+                        "http://localhost:8000/registerdetails",
+                        { id: bookingId, details: passenger }
                     )
                 )
             );
             console.log("Passenger details submitted successfully");
+
             // Reset form fields
             setPassengers([{ ...initialPassengerState }]);
         } catch (error) {
             console.error("Error submitting passenger details:", error);
+            // Handle error (e.g., show error message to the user)
         }
-
-        axios.post("http://localhost:8000/book", {num: passengers.length, user: user}).then(function(res){
-            alert(`Ticket booked - ${res.data}`)
-        }).catch(function(error){
-
-        });
     };
 
     const handleAddPassenger = () => {
         setPassengers([...passengers, { ...initialPassengerState }]);
-        const x = passengers.length+1;
+        const x = passengers.length + 1;
         console.log(passengers.length);
-        setDis(cost*x);
+        setDis(cost * x);
+        console.log(cost, x, cost * x);
     };
 
     const handleDeletePassenger = (index) => {
         const newPassengers = passengers.filter((_, i) => i !== index);
         setPassengers(newPassengers);
-        const x = newPassengers.length+1;
-        console.log(newPassengers.length);
-        console.log(passengers.length);
-        setDis(cost*x);
+        const x = newPassengers.length;
+        console.log(x);
+        setDis(cost * x);
     };
 
     return (

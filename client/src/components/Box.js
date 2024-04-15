@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from 'react-redux';
-import { selectUser, setCost } from "../features/userSlice";
+import { useDispatch } from 'react-redux';
+import { setCost } from "../features/userSlice";
 
 const Box = (props) => {
     const navigate = useNavigate();

@@ -41,10 +41,19 @@
   width: fit-content;
   align-items: center;
   justify-content: center;
+  color: #213d77;
 }
 
 #id {
   border: 1px solid black;
   padding: 5px;
   margin-bottom: 10px;
+}
+
+button {
+  background-color: #FB792b;
+}
+
+*{
+  color: #213d77;
 }
