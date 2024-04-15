@@ -1,9 +1,7 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const Pnr = () => {
-    const navigate = useNavigate();
 
     const [pnr, setPnr] = useState("");
     const [ticketDetails, setTicketDetails] = useState(null);
